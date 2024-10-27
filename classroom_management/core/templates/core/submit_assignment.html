@@ -1,0 +1,13 @@
+<!-- core/templates/core/submit_assignment.html -->
+{% extends "core/base.html" %}
+
+{% block content %}
+<h2>Submit Assignment: {{ assignment.title }}</h2>
+<p><strong>Description:</strong> {{ assignment.description }}</p>
+<p><strong>Due Date:</strong> {{ assignment.due_date }}</p> 
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Assignment</button>
+</form>
+{% endblock %}

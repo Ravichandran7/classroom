@@ -1,0 +1,17 @@
+<!-- core/templates/core/view_resources.html -->
+{% extends "core/base.html" %}
+
+{% block content %}
+<h2>Available Resources</h2>
+<ul>
+    {% for resource in resources %}
+        <li>
+            <strong>{{ resource.title }}</strong> - Uploaded by: {{ resource.teacher.user.username }}
+            <p>{{ resource.description }}</p>
+            <a href="{{ resource.file.url }}" download>Download Resource</a>
+        </li>
+    {% empty %}
+        <li>No resources available at this time.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

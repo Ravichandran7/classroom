@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h2>Teacher Dashboard</h2>
+<ul>
+    <p>Welcome, {{ user.username }}! You are logged in as a teacher.</p>
+
+    <li><a href="{% url 'manage_assignments' %}">Manage Assignments</a></li>
+    <li><a href="{% url 'manage_submissions' 1 %}">Manage Submissions</a></li>
+    <li><a href="{% url 'add_resources' %}">Add Resources</a></li>
+    <li><a href="{% url 'notify_students' %}">Notify Students</a></li>
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+
+</ul>
+{% endblock %}

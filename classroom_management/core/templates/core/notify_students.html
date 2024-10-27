@@ -1,0 +1,10 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h2>Notify Students</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="message">Notification Message:</label>
+    <textarea name="message" id="message" rows="4"></textarea>
+    <button type="submit">Send Notification</button>
+</form>
+{% endblock %}
