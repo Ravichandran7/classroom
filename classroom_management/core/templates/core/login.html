@@ -2,13 +2,15 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-<h2>Login</h2>
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
-
-<!-- Register button -->
-<p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+<div class="container" style="display: flex; justify-content: center; align-items: center; height: 100vh; margin-top: -50px;">
+    <div class="card" style="width: 400px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <h2 class="text-center">Login</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        <p class="text-center mt-3">Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+    </div>
+</div>
 {% endblock %}

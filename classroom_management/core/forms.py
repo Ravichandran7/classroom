@@ -35,7 +35,7 @@ class UserRegistrationForm(UserCreationForm):
         ('teacher', 'Teacher')
     ]
     user_type = forms.ChoiceField(choices=USER_TYPE_CHOICES, widget=forms.RadioSelect)
-
+    
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2', 'user_type']

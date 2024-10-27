@@ -1,24 +1,23 @@
+<!-- core/templates/core/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}  <!-- Add this line -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Online Classroom{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% block title %}Skillpathway{% endblock %}</title>
 </head>
 <body>
-    <nav>
-        <a href="{% url 'teacher_dashboard' %}">Teacher Dashboard</a> |
-        <a href="{% url 'student_dashboard' %}">Student Dashboard</a> |
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-    </nav>
-    <div class="content">
+    {% include 'core/inc/navebar.html' %}
+    <div class="container" style="margin-top: 70px;">  <!-- Add margin to prevent content from hiding behind the navbar -->
         {% block content %}
         {% endblock %}
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+{% include 'core/inc/navebar.html' %}
