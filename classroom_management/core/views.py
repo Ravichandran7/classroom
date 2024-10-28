@@ -11,6 +11,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm 
 from django.shortcuts import render
 from .decorators import teacher_required, student_required
+from django.contrib.auth.views import LoginView
 
 
 def register(request):
@@ -57,6 +58,9 @@ def user_login(request):
     
     return render(request, 'core/login.html', {'form': form})
 
+class CustomLoginView(LoginView):
+    template_name = 'core/login.html'
+    
 def custom_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)

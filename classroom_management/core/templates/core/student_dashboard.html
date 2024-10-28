@@ -51,7 +51,12 @@
         <a href="{% url 'view_resources' %}">View Resources</a>
         <a href="{% url 'notification_page' %}">Notifications</a>
         <a href="{% url 'list_assignments' %}">View Assignments</a>
-        <a href="{% url 'logout' %}">Logout</a>
+        <center>
+            <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </center>
     </div>
 </div>
 {% endblock %}

@@ -55,7 +55,11 @@
         <li><a href="{% url 'manage_submissions' 1 %}">Manage Submissions</a></li>
         <li><a href="{% url 'add_resources' %}">Add Resources</a></li>
         <li><a href="{% url 'notify_students' %}">Notify Students</a></li>
-        <li><a href="{% url 'logout' %}">Logout</a></li>
+        <li><center><form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </center></li>
     </ul>
 </div>
 {% endblock %}
