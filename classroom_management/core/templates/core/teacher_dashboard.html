@@ -55,6 +55,7 @@
         <li><a href="{% url 'manage_submissions' 1 %}">Manage Submissions</a></li>
         <li><a href="{% url 'add_resources' %}">Add Resources</a></li>
         <li><a href="{% url 'notify_students' %}">Notify Students</a></li>
+        <li><a href="{% url 'track_student_progress' %}">Track Student Progress</a></li> <!-- Add this link -->
         <li><center><form method="post" action="{% url 'logout' %}">
             {% csrf_token %}
             <button type="submit">Logout</button>

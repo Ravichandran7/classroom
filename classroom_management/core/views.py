@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Assignment, Submission, Resource, Notification,Teacher,AssignmentSubmission
-from .forms import AssignmentForm, SubmissionForm, ResourceForm ,AssignmentSubmissionForm
+from .models import Assignment, Submission, Resource, Notification,Teacher,AssignmentSubmission,StudentProgress
+from .forms import AssignmentForm, SubmissionForm, ResourceForm ,AssignmentSubmissionForm,GradeFeedbackForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
@@ -11,7 +11,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm 
 from django.shortcuts import render
 from .decorators import teacher_required, student_required
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView,LogoutView
+from django.utils import timezone
+from django.urls import reverse
+from django.contrib import messages
+
 
 
 def register(request):
@@ -59,28 +63,20 @@ def user_login(request):
     return render(request, 'core/login.html', {'form': form})
 
 class CustomLoginView(LoginView):
-    template_name = 'core/login.html'
-    
-def custom_login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
+    def get_success_url(self):
+        if hasattr(self.request.user, 'teacher'):  # Check if the user has a teacher profile
+            return reverse('teacher_dashboard')
+        elif hasattr(self.request.user, 'student'):  # Check if the user has a student profile
+            return reverse('student_dashboard')
+        else:
+            return reverse('login')  # Fallback in case the user has no profile
+        
 
-            if user is not None:
-                login(request, user)
-                # Redirect to the appropriate dashboard
-                if hasattr(user, 'teacher'):
-                    return redirect('teacher_dashboard')
-                elif hasattr(user, 'student'):
-                    return redirect('student_dashboard')
-    else:
-        form = AuthenticationForm()
-
-    return render(request, 'core/login.html', {'form': form})
-
+class CustomLogoutView(LogoutView):
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "You have been logged out successfully.")
+        return super().dispatch(request, *args, **kwargs)   
+        
 @login_required
 @teacher_required
 def teacher_dashboard(request):
@@ -132,6 +128,7 @@ def manage_submissions(request, assignment_id):
 def submit_assignment(request, assignment_id):
     assignment = get_object_or_404(Assignment, id=assignment_id)
     
+    # Update StudentProgress
     if request.method == 'POST':
         form = AssignmentSubmissionForm(request.POST, request.FILES)
         if form.is_valid():
@@ -139,12 +136,49 @@ def submit_assignment(request, assignment_id):
             submission.assignment = assignment
             submission.student = request.user
             submission.save()
-            return redirect('student_dashboard')  # Redirect after submission
+
+            # Update or create progress entry
+            progress, created = StudentProgress.objects.update_or_create(
+                student=request.user,
+                assignment=assignment,
+                defaults={
+                    'is_submitted': True,
+                    'submission_date': timezone.now()
+                }
+            )
+            return redirect('student_dashboard')  # Redirect to dashboard after submission
     else:
         form = AssignmentSubmissionForm()
 
-    return render(request, 'core/submit_assignment.html', {'form': form, 'assignment': assignment})
+    return render(request, 'core/submit_assignment.html', {
+        'form': form,
+        'assignment': assignment,
+    })
+    
+@login_required
+@teacher_required  # Ensure only teachers can access
+def track_student_progress(request):
+    # Retrieve all StudentProgress entries with related student and assignment data
+    progress = StudentProgress.objects.all().select_related('student', 'assignment')
 
+    if request.method == 'POST':
+        # Retrieve the specific StudentProgress entry
+        progress_id = request.POST.get("progress_id")
+        progress_entry = get_object_or_404(StudentProgress, id=progress_id)
+        
+        # Initialize form with the specific StudentProgress instance
+        form = GradeFeedbackForm(request.POST, instance=progress_entry)
+
+        # Save only if fields are still editable
+        if form.is_valid() and progress_entry.grade is None and not progress_entry.feedback:
+            form.save()  # Save the form data to update grade and feedback
+            return redirect('track_student_progress')  # Refresh page after saving
+
+    # Display all progress entries along with a fresh form for rendering fields
+    return render(request, 'core/track_student_progress.html', {
+        'progress': progress,
+    })
+    
 @login_required
 def view_submissions(request, assignment_id):
     assignment = get_object_or_404(Assignment, id=assignment_id)
@@ -178,17 +212,20 @@ def add_resources(request):
 def view_resources(request):
     resources = Resource.objects.all()  # Retrieve all resources
     return render(request, 'core/view_resources.html', {'resources': resources})
+
 @login_required
-def notify_students(request):
-    students = Student.objects.all()  # Retrieve all student instances
-    if request.method == 'POST':
-        message = request.POST.get('message')
-        for student in students:
-            Notification.objects.create(recipient=student, message=message)
-        return redirect('notify_students')  # Redirect after sending notifications
+def notify_students(request, assignment_id):
+    assignment = get_object_or_404(Assignment, id=assignment_id)
+    students = User.objects.filter(groups__name='Students')  # Assuming students are in a 'Students' group
 
-    return render(request, 'core/notify_students.html')
+    for student in students:
+        Notification.objects.create(
+            recipient=student,
+            sender=request.user,  # The teacher sending the notification
+            message=f"New update on assignment '{assignment.title}' by {request.user.username}."
+        )
 
+    return redirect('teacher_dashboard')
 
 @login_required
 def assignment_page(request):
@@ -197,12 +234,7 @@ def assignment_page(request):
 
 @login_required
 def notification_page(request):
-    # Check if the user has a Student profile
-    if not hasattr(request.user, 'student'):
-        return HttpResponseForbidden("You do not have permission to view this page.")
-    
-    # Proceed with the view if the user is a student
-    notifications = Notification.objects.filter(recipient=request.user.student, is_read=False)
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-timestamp')
     return render(request, 'core/notification_page.html', {'notifications': notifications})
 
 @login_required

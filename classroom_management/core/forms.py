@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Assignment, Submission, Resource
 from django.forms.widgets import DateInput
 from django.contrib.auth.models import User
-from .models import Teacher, Student
+from .models import Teacher, Student,StudentProgress
 from .models import AssignmentSubmission
 
 
@@ -47,3 +47,17 @@ class AssignmentSubmissionForm(forms.ModelForm):
         widgets = {
             'comments': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Add any comments for the teacher...'}),
         }
+class GradeFeedbackForm(forms.ModelForm):
+    class Meta:
+        model = StudentProgress
+        fields = ['grade', 'feedback']
+        widgets = {
+            'feedback': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Provide feedback...'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make grade and feedback read-only if they are already set
+        if self.instance.grade is not None and self.instance.feedback:
+            self.fields['grade'].widget.attrs['readonly'] = True
+            self.fields['feedback'].widget.attrs['readonly'] = True

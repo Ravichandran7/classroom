@@ -31,3 +31,40 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+    body {
+        background-color: #f4f7fa; /* Light grey background for a clean look */
+        font-family: 'Arial', sans-serif; /* Modern font */
+    }
+
+    h2 {
+        color: #333; /* Darker color for the heading */
+        font-weight: 600; /* Slightly bolder font */
+    }
+
+    .list-group-item {
+        border: 1px solid #dee2e6; /* Light border for list items */
+        border-radius: 0.5rem; /* Rounded corners */
+        background-color: #ffffff; /* White background for items */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Bootstrap primary color */
+        border: none; /* Remove border */
+        transition: background-color 0.3s; /* Smooth transition for hover effect */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Darker shade on hover */
+    }
+
+    .form-control {
+        border-radius: 0.25rem; /* Rounded corners for input fields */
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding-left: 15px; /* Add padding for smaller screens */
+            padding-right: 15px;
+        }
+    }

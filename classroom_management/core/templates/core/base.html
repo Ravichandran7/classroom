@@ -6,11 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{% block title %}Skillpathway{% endblock %}</title>
+    
+     {% load static %}
+    <link rel="stylesheet" href="{% static 'your_app/styles.css' %}"> <title>{% block title %}Skillpathway{% endblock %}</title>
+    <style>
+        body {
+            padding-top: 70px; /* Space for the fixed navbar */
+        }
+    </style>
 </head>
 <body>
     {% include 'core/inc/navebar.html' %}
-    <div class="container" style="margin-top: 70px;">  <!-- Add margin to prevent content from hiding behind the navbar -->
+    <br>
+    <br>
+    <br>
+    <div>
+    <div class="container">  <!-- No need for additional margin-top here -->
         {% block content %}
         {% endblock %}
     </div>

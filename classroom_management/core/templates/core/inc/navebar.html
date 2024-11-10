@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container">
-      <a class="navbar-brand" href="#">Skillpathway</a>
+      <a class="navbar-brand" >Skillpathway</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
       </button>
@@ -20,7 +20,7 @@
               <li class="nav-item">
                   <form method="post" action="{% url 'logout' %}" style="display:inline;">
                       {% csrf_token %}
-                      <a href="#" class="nav-link" onclick="this.closest('form').submit();" style=" color: white; text-decoration: none;">
+                      <a href="{% url 'logout' %}" class="nav-link" onclick="this.closest('form').submit();" style=" color: white; text-decoration: none;">
                           </i> Logout
                       </a>
                   </form>

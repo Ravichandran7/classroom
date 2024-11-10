@@ -1,16 +1,20 @@
-<!-- core/templates/core/view_submissions.html -->
 {% extends "core/base.html" %}
-
 {% block content %}
-<h2>Submissions for: {{ assignment.title }}</h2>
-<ul>
-    {% for submission in submissions %}
-        <li>
-            Student: {{ submission.student.username }} - Submitted at: {{ submission.submitted_at }}
-            <a href="{{ submission.submission_file.url }}" download>Download Submission</a>
-        </li>
-    {% empty %}
-        <li>No submissions yet.</li>
-    {% endfor %}
-</ul>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Submissions for: {{ assignment.title }}</h2>
+    <ul class="list-group">
+        {% for submission in submissions %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>Student:</strong> {{ submission.student.username }}<br>
+                    <small class="text-muted">Submitted at: {{ submission.submitted_at }}</small>
+                </div>
+                <a href="{{ submission.submission_file.url }}" class="btn btn-outline-primary btn-sm" download>Download Submission</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-center">No submissions yet.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

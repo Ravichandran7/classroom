@@ -13,4 +13,11 @@
         <p class="text-center mt-3">Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
     </div>
 </div>
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 {% endblock %}

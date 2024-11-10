@@ -1,10 +1,14 @@
 {% extends "core/base.html" %}
 {% block content %}
-<h2>Notify Students</h2>
-<form method="post">
-    {% csrf_token %}
-    <label for="message">Notification Message:</label>
-    <textarea name="message" id="message" rows="4"></textarea>
-    <button type="submit">Send Notification</button>
-</form>
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Notify Students</h2>
+    <form method="post" class="shadow p-4 rounded bg-light">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="message" class="form-label">Notification Message:</label>
+            <textarea name="message" id="message" class="form-control" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Send Notification</button>
+    </form>
+</div>
 {% endblock %}
