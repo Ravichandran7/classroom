@@ -1,0 +1,19 @@
+<!-- core/templates/core/manage_submissions.html -->
+{% extends "core/base.html" %}
+
+{% block content %}
+<h2>Submissions for: {{ assignment.title }}</h2>
+
+<ul>
+    {% for submission in submissions %}
+        <li>
+            <strong>Student:</strong> {{ submission.student.username }} <br>
+            <strong>Submitted at:</strong> {{ submission.submitted_at }} <br>
+            <strong>Comments:</strong> {{ submission.comments|default:"No comments" }} <br>
+            <a href="{{ submission.submission_file.url }}" download>Download Submission</a>
+        </li>
+    {% empty %}
+        <li>No submissions yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

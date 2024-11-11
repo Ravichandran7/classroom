@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Available Resources</h2>
+    <ul class="list-group">
+        {% for resource in resources %}
+            <li class="list-group-item">
+                <h5 class="mb-1">{{ resource.title }}</h5>
+                <small>Uploaded by: {{ resource.teacher.user.username }}</small>
+                <p class="mb-1">{{ resource.description }}</p>
+                <a href="{{ resource.file.url }}" class="btn btn-primary btn-sm" download>Download Resource</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-center">No resources available at this time.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

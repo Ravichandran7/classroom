@@ -1,0 +1,20 @@
+{% extends "core/base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Submissions for: {{ assignment.title }}</h2>
+    <ul class="list-group">
+        {% for submission in submissions %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>Student:</strong> {{ submission.student.username }}<br>
+                    <small class="text-muted">Submitted at: {{ submission.submitted_at }}</small>
+                </div>
+                <a href="{{ submission.submission_file.url }}" class="btn btn-outline-primary btn-sm" download>Download Submission</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-center">No submissions yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

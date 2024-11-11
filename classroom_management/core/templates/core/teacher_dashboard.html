@@ -1,0 +1,66 @@
+<!-- core/templates/core/teacher_dashboard.html -->
+{% extends "core/base.html" %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    .dashboard-container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        color: #333;
+    }
+    p {
+        font-size: 16px;
+        color: #666;
+    }
+    .nav-links {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+    .nav-links li {
+        margin: 10px 0;
+    }
+    .nav-links a {
+        text-decoration: none;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        display: block;
+        text-align: center;
+        transition: background-color 0.3s;
+    }
+    .nav-links a:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2>Teacher Dashboard</h2>
+    <p>Welcome, {{ user.username }}! You are logged in as a teacher.</p>
+    <ul class="nav-links">
+        <li><a href="{% url 'manage_assignments' %}">Manage Assignments</a></li>
+        <li><a href="{% url 'manage_submissions' 1 %}">Manage Submissions</a></li>
+        <li><a href="{% url 'add_resources' %}">Add Resources</a></li>
+        <li><a href="{% url 'notify_students' %}">Notify Students</a></li>
+        <li><a href="{% url 'track_student_progress' %}">Track Student Progress</a></li> <!-- Add this link -->
+        <li><center><form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </center></li>
+    </ul>
+</div>
+{% endblock %}

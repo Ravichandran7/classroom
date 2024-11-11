@@ -1,0 +1,17 @@
+<!-- core/templates/core/notification_page.html -->
+{% extends "core/base.html" %}
+
+{% block content %}
+<h2 class="notifications-title">Notifications</h2>
+<ul class="notifications-list">
+    {% for notification in notifications %}
+        <li class="notification-item{% if not notification.is_read %} unread{% endif %}">
+            <strong class="notification-sender">{{ notification.sender.username }}</strong> - 
+            <span class="notification-message">{{ notification.message }}</span>
+            <small class="notification-timestamp">on {{ notification.timestamp|date:"d M Y H:i" }}</small>
+        </li>
+    {% empty %}
+        <li class="no-notifications">No notifications available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
